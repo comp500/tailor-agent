@@ -34,11 +34,11 @@ public class Agent implements ClassFileTransformer {
 	}
 
 	private final Path dumpPath;
-	private final Path overwritePath;
+	private final Path overridePath;
 
 	public Agent() {
-		dumpPath = Paths.get("dumped");
-		overwritePath = Paths.get("reload");
+		dumpPath = Paths.get(".tailor/dumped");
+		overridePath = Paths.get(".tailor/override");
 	}
 
 	@Override
@@ -46,11 +46,11 @@ public class Agent implements ClassFileTransformer {
 		String classRelPath = classToRelPath(className);
 		dumpClass(classRelPath, classBytes);
 
-		Path overwriteClassPath = overwritePath.resolve(classRelPath);
-		if (Files.exists(overwriteClassPath)) {
+		Path overrideClassPath = overridePath.resolve(classRelPath);
+		if (Files.exists(overrideClassPath)) {
 			try {
 				// Return the overwritten class
-				return Files.readAllBytes(overwriteClassPath);
+				return Files.readAllBytes(overrideClassPath);
 			} catch (IOException e) {
 				// TODO: better error handling?
 				e.printStackTrace();
